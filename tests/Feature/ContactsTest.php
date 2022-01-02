@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Contact;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -21,7 +22,7 @@ class ContactsTest extends TestCase
 
         $this->assertEquals('Test Name', $contact->name);
         $this->assertEquals('test@gmail.con', $contact->email);
-        $this->assertEquals('05/14/1988', $contact->birthday);
+        $this->assertEquals('05/28/1988', $contact->birthday);
         $this->assertEquals('ABC String', $contact->company);
     }
 
@@ -39,12 +40,35 @@ class ContactsTest extends TestCase
         });
     }
 
+    /** @test */
+    public function email_must_be_a_valid_email()
+    {
+        $response = $this->post('/api/contacts',
+            array_merge($this->data(), ['email' => 'Not an Email']));
+
+        $response->assertSessionHasErrors('email');
+        $this->assertCount(0, Contact::all());
+    }
+
+    /** @test */
+    public function birthday_are_property_stored()
+    {
+        $this->withoutExceptionHandling();
+        $response = $this->post('/api/contacts',
+            array_merge($this->data()));
+
+        $this->assertCount(1, Contact::all());
+        $this->assertInstanceOf(Carbon::class, Contact::first()->birthday);
+
+        //TODO: 実際にその日付を取り戻して、フォーマットできるか？
+    }
+
     private function data()
     {
         return [
             'name' => 'Test Name',
             'email' => 'test@gmail.con',
-            'birthday' => '05/14/1988',
+            'birthday' => '05/28/1988',
             'company' => 'ABC String'
         ];
     }
