@@ -14,14 +14,8 @@ class ContactsTest extends TestCase
     /** @test */
     public function a_contact_can_be_added()
     {
-        // 例外処理を省く
-        $this->withoutExceptionHandling();
-        $this->post('/api/contacts', [
-            'name' => 'Test Name',
-            'email' => 'test@gmail.con',
-            'birthday' => '05/14/1988',
-            'company' => 'ABC String'
-        ]);
+
+        $this->post('/api/contacts', $this->data());
 
         $contact = Contact::first();
 
@@ -32,29 +26,26 @@ class ContactsTest extends TestCase
     }
 
     /** @test */
-    public function a_name_is_required()
+    public function fields_are_required()
     {
-        $response = $this->post('/api/contacts', [
+        collect(['name', 'email', 'birthday', 'company'])
+            ->each(function($field) {
+                // nameキーを削除するオーバーライドで、名前だけ無効化することがわかる!
+                $response = $this->post('/api/contacts',
+                    array_merge($this->data(), [$field => '']));
+
+                $response->assertSessionHasErrors($field);
+                $this->assertCount(0, Contact::all());
+        });
+    }
+
+    private function data()
+    {
+        return [
+            'name' => 'Test Name',
             'email' => 'test@gmail.con',
             'birthday' => '05/14/1988',
             'company' => 'ABC String'
-        ]);
-
-        $response->assertSessionHasErrors('name');
-        $this->assertCount(0, Contact::all());
+        ];
     }
-
-    /** @test */
-    public function a_email_is_required()
-    {
-        $response = $this->post('/api/contacts', [
-            'name' => 'Test Name',
-            'birthday' => '05/14/1988',
-            'company' => 'ABC String'
-        ]);
-
-        $response->assertSessionHasErrors('email');
-        $this->assertCount(0, Contact::all());
-    }
-
 }
