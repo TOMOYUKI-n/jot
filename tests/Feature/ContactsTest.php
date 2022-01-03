@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Contact;
 use Carbon\Carbon;
+use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -22,7 +23,7 @@ class ContactsTest extends TestCase
 
         $this->assertEquals('Test Name', $contact->name);
         $this->assertEquals('test@gmail.con', $contact->email);
-        $this->assertEquals('05/28/1988', $contact->birthday);
+        $this->assertEquals('05/28/1988', $contact->birthday->format('m/d/Y'));
         $this->assertEquals('ABC String', $contact->company);
     }
 
@@ -61,6 +62,36 @@ class ContactsTest extends TestCase
         $this->assertInstanceOf(Carbon::class, Contact::first()->birthday);
 
         $this->assertEquals('05-28-1988', Contact::first()->birthday->format('m-d-Y'));
+    }
+
+    /** @test */
+    public function a_contact_can_be_retrieved()
+    {
+        $contact = Contact::factory()->create();
+
+        $response = $this->get('/api/contacts/' . $contact->id);
+        $response->assertJson([
+            'name' => $contact->name,
+            'email' => $contact->email,
+            'birthday' => '1988-05-28T00:00:00.000000Z',
+            'company' => $contact->company,
+        ]);
+    }
+
+    /** @test */
+    public function a_contact_can_be_patched()
+    {
+        $this->withoutExceptionHandling();
+        $contact = Contact::factory()->create();
+
+        $response = $this->patch('/api/contacts/' . $contact->id, $this->data());
+
+        $contact = $contact->fresh();
+
+        $this->assertEquals('Test Name', $contact->name);
+        $this->assertEquals('test@gmail.con', $contact->email);
+        $this->assertEquals('05/28/1988', $contact->birthday->format('m/d/Y'));
+        $this->assertEquals('ABC String', $contact->company);
     }
 
     private function data()

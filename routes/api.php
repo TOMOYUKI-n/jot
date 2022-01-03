@@ -8,4 +8,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/contacts/{contact}', [ContactsController::class, 'show']);
 Route::post('/contacts', [ContactsController::class, 'store']);
+Route::patch('/contacts/{contact}', [ContactsController::class, 'update']);
