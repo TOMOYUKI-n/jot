@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ContactsTest extends TestCase
@@ -19,7 +20,7 @@ class ContactsTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->user = Sanctum::actingAs(User::factory()->create());
     }
 
     /** @test */
@@ -37,7 +38,6 @@ class ContactsTest extends TestCase
         $this->withoutExceptionHandling();
 
         // dd($this->user->api_token);
-
         $this->post('/api/contacts', $this->data());
 
         $contact = Contact::first();
