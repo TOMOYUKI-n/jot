@@ -55,12 +55,12 @@ class ContactsTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $response = $this->post('/api/contacts',
-            array_merge($this->data()));
+            array_merge($this->data(), ['birthday' => 'May 28, 1988']));
 
         $this->assertCount(1, Contact::all());
         $this->assertInstanceOf(Carbon::class, Contact::first()->birthday);
 
-        //TODO: 実際にその日付を取り戻して、フォーマットできるか？
+        $this->assertEquals('05-28-1988', Contact::first()->birthday->format('m-d-Y'));
     }
 
     private function data()
