@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Contact;
+use App\Models\User;
 use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,9 +14,29 @@ class ContactsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function a_contact_can_be_added()
+    protected $user;
+    protected function setUp(): void
     {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
+    /** @test */
+    public function an_unauthenticated_user_should_redirected_to_login()
+    {
+        $response = $this->post('/api/contacts', $this->data());
+
+        $response->assertRedirect('/login');
+        $this->assertCount(0, Contact::all());
+    }
+
+    /** @test */
+    public function an_authenticated_user_can_add_a_contact()
+    {
+        $this->withoutExceptionHandling();
+
+        // dd($this->user->api_token);
 
         $this->post('/api/contacts', $this->data());
 
@@ -94,13 +115,24 @@ class ContactsTest extends TestCase
         $this->assertEquals('ABC String', $contact->company);
     }
 
+    /** @test */
+    public function a_contact_can_be_deleted()
+    {
+        $contact = Contact::factory()->create();
+
+        $response = $this->delete('api/contacts/' . $contact->id);
+
+        $this->assertCount(0, Contact::all());
+    }
+
     private function data()
     {
         return [
             'name' => 'Test Name',
             'email' => 'test@gmail.con',
             'birthday' => '05/28/1988',
-            'company' => 'ABC String'
+            'company' => 'ABC String',
+            'api_token' => $this->user->api_token
         ];
     }
 }
