@@ -20,19 +20,17 @@ class ContactsTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = Sanctum::actingAs(User::factory()->create(), ['*']);
+        $this->user = User::factory()->create();
     }
 
     /** @test */
     public function an_unauthenticated_user_should_redirected_to_login()
     {
-        //TODO: なぜトークン発行しているのにpostのレスポンスがstatus:200？
         $response = $this->post('/api/contacts',
             array_merge($this->data(), ['api_token' => '']));
 
-        // $response->assertRedirect('/login');
-        // $this->assertCount(0, Contact::all());
-        $response->assertStatus(200);
+        $response->assertRedirect('login');
+        $this->assertCount(0, Contact::all());
     }
 
     /** @test */
@@ -65,7 +63,7 @@ class ContactsTest extends TestCase
     public function email_must_be_a_valid_email()
     {
         $response = $this->post('/api/contacts',
-            array_merge($this->data(), ['email' => 'Not an Email']));
+            array_merge($this->data(), ['email' => 'Not an Email'], ['api_token' => $this->user->api_token]));
 
         $response->assertSessionHasErrors('email');
         $this->assertCount(0, Contact::all());
