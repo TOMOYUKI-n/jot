@@ -23,19 +23,27 @@ class ContactsTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-    /** @test */
+    /**
+     * @test
+     * 
+     * sanctumを利用すると認証したことになりredirectが判定できないのでここだけsanctumを外す。
+     * @return void
+     */
     public function an_unauthenticated_user_should_redirected_to_login()
     {
         $response = $this->post('/api/contacts',
             array_merge($this->data(), ['api_token' => '']));
 
-        $response->assertRedirect('login');
+        $response->assertRedirect('/login');
         $this->assertCount(0, Contact::all());
     }
 
     /** @test */
     public function an_authenticated_user_can_add_a_contact()
     {
+        /** sanctum利用で認証を通す */
+        Sanctum::actingAs($this->user);
+
         $this->post('/api/contacts', $this->data());
 
         $contact = Contact::first();
@@ -49,6 +57,8 @@ class ContactsTest extends TestCase
     /** @test */
     public function fields_are_required()
     {
+        Sanctum::actingAs($this->user);
+
         collect(['name', 'email', 'birthday', 'company'])
             ->each(function($field) {
                 $response = $this->post('/api/contacts',
@@ -62,8 +72,10 @@ class ContactsTest extends TestCase
     /** @test */
     public function email_must_be_a_valid_email()
     {
+        Sanctum::actingAs($this->user);
+
         $response = $this->post('/api/contacts',
-            array_merge($this->data(), ['email' => 'Not an Email'], ['api_token' => $this->user->api_token]));
+            array_merge($this->data(), ['email' => 'Not an Email']));
 
         $response->assertSessionHasErrors('email');
         $this->assertCount(0, Contact::all());
@@ -72,6 +84,8 @@ class ContactsTest extends TestCase
     /** @test */
     public function birthday_are_property_stored()
     {
+        Sanctum::actingAs($this->user);
+
         $this->withoutExceptionHandling();
         $response = $this->post('/api/contacts',
             array_merge($this->data(), ['birthday' => 'May 28, 1988']));
@@ -85,6 +99,8 @@ class ContactsTest extends TestCase
     /** @test */
     public function a_contact_can_be_retrieved()
     {
+        Sanctum::actingAs($this->user);
+
         $contact = Contact::factory()->create();
 
         $response = $this->get('/api/contacts/' . $contact->id . '?api_token=' . $this->user->api_token);
@@ -99,6 +115,8 @@ class ContactsTest extends TestCase
     /** @test */
     public function a_contact_can_be_patched()
     {
+        Sanctum::actingAs($this->user);
+
         $this->withoutExceptionHandling();
         $contact = Contact::factory()->create();
 
@@ -115,6 +133,8 @@ class ContactsTest extends TestCase
     /** @test */
     public function a_contact_can_be_deleted()
     {
+        Sanctum::actingAs($this->user);
+
         $contact = Contact::factory()->create();
 
         $response = $this->delete('api/contacts/' . $contact->id,
