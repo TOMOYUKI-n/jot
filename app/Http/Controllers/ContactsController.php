@@ -9,16 +9,22 @@ class ContactsController extends Controller
 {
     public function index()
     {
+        //dd(request()->user()->contacts);
         return request()->user()->contacts;
     }
 
     public function store()
     {
-        Contact::create($this->validateData());
+        request()->user()->contacts()->create(array_merge(['user_id' => request()->user()->id], $this->validateData()));
     }
 
     public function show(Contact $contact)
     {
+        // ２つのモデルが異なるかを判定する
+        if(request()->user()->isNot($contact->user)) {
+            return response([], 403);
+        }
+
         return $contact;
     }
 
@@ -32,7 +38,7 @@ class ContactsController extends Controller
         $contact->delete();
     }
 
-    private function validateData()
+    private function validateData(): array
     {
         return request()->validate([
             'name' => 'required',
