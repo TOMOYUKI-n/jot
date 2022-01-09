@@ -34,8 +34,13 @@ class ContactsTest extends TestCase
 
         $response = $this->get('/api/contacts?api_token=' . $user->api_token);
 
+        //dd(json_decode($response->getContent()));
         $response->assertJsonCount(1)
-            ->assertJson([['id' => $contact->id]]);
+            ->assertJson([
+                'data' => [
+                    ['contact_id' => $contact->id]
+                ]
+            ]);
     }
 
     /** @test */
@@ -94,11 +99,16 @@ class ContactsTest extends TestCase
         $contact = Contact::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->get('/api/contacts/' . $contact->id . '?api_token=' . $this->user->api_token);
+
         $response->assertJson([
-            'name' => $contact->name,
-            'email' => $contact->email,
-            'birthday' => '1988-05-28T00:00:00.000000Z',
-            'company' => $contact->company,
+            'data' => [
+                'contact_id' => $contact->id,
+                'name' => $contact->name,
+                'email' => $contact->email,
+                'birthday' => $contact->birthday->format('m/d/Y'),
+                'company' => $contact->company,
+                'last_updated' => $contact->updated_at->diffForHumans(),
+            ]
         ]);
     }
 
@@ -119,7 +129,7 @@ class ContactsTest extends TestCase
     public function a_contact_can_be_patched()
     {
         $this->withoutExceptionHandling();
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->patch('/api/contacts/' . $contact->id, $this->data());
 
@@ -132,14 +142,40 @@ class ContactsTest extends TestCase
     }
 
     /** @test */
-    public function a_contact_can_be_deleted()
+    public function only_the_owner_of_the_contact_can_patch_the_contact()
     {
         $contact = Contact::factory()->create();
 
-        $response = $this->delete('api/contacts/' . $contact->id,
+        $anotherUser = User::factory()->create();
+
+        $response = $this->patch('/api/contacts/' . $contact->id,
+            array_merge($this->data(), ['api_token' => $anotherUser->api_token]));
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_contact_can_be_deleted()
+    {
+        $contact = Contact::factory()->create(['user_id' => $this->user->id]);
+
+        $response = $this->delete('/api/contacts/' . $contact->id,
             ['api_token' => $this->user->api_token]);
 
         $this->assertCount(0, Contact::all());
+    }
+
+    /** @test */
+    public function only_the_owner_can_delete_the_contact()
+    {
+        $contact = Contact::factory()->create();
+
+        $anotherUser = User::factory()->create();
+
+        $response = $this->delete('/api/contacts/' . $contact->id,
+            ['api_token' => $this->user->api_token]);
+
+        $response->assertStatus(403);
     }
 
     private function data()
