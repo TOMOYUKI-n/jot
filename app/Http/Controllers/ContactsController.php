@@ -9,7 +9,6 @@ class ContactsController extends Controller
 {
     public function index()
     {
-        //dd(request()->user()->contacts);
         return request()->user()->contacts;
     }
 
@@ -30,11 +29,20 @@ class ContactsController extends Controller
 
     public function update(Contact $contact)
     {
+        if(request()->user()->isNot($contact->user)) {
+            return response([], 403);
+        }
+
         $contact->update($this->validateData());
     }
 
     public function destroy(Contact $contact)
     {
+        // ２つのモデルが異なるかを判定する
+        if(request()->user()->isNot($contact->user)) {
+            return response([], 403);
+        }
+
         $contact->delete();
     }
 
