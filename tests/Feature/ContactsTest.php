@@ -26,8 +26,22 @@ class ContactsTest extends TestCase
     /** 認証はContactsAuthenticationに。 */
 
     /** @test */
+    public function a_list_of_contacts_can_be_fetched_for_the_authenticated_user()
+    {
+        $user = User::factory()->create();
+
+        $contact = Contact::factory()->create(['user_id' => $user->id]);
+
+        $response = $this->get('/api/contacts?api_token=' . $user->api_token);
+
+        $response->assertJsonCount(1)
+            ->assertJson([['id' => $contact->id]]);
+    }
+
+    /** @test */
     public function an_authenticated_user_can_add_a_contact()
     {
+        $this->withoutExceptionHandling();
         $this->post('/api/contacts', $this->data());
 
         $contact = Contact::first();
@@ -77,7 +91,7 @@ class ContactsTest extends TestCase
     /** @test */
     public function a_contact_can_be_retrieved()
     {
-        $contact = Contact::factory()->create();
+        $contact = Contact::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->get('/api/contacts/' . $contact->id . '?api_token=' . $this->user->api_token);
         $response->assertJson([
@@ -86,6 +100,19 @@ class ContactsTest extends TestCase
             'birthday' => '1988-05-28T00:00:00.000000Z',
             'company' => $contact->company,
         ]);
+    }
+
+    /** @test */
+    public function only_the_users_contacts_can_be_retrieved()
+    {
+        $contact = Contact::factory()->create(['user_id' => $this->user->id]);
+
+        // 違う認証を通した人からのアクセスを許さないテストなので認証を通しておく
+        $anotherUser = Sanctum::actingAs(User::factory()->create());
+
+        $response = $this->get('/api/contacts/' . $contact->id . '?api_token=' . $anotherUser->api_token);
+
+        $response->assertStatus(403);
     }
 
     /** @test */
