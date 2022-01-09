@@ -9,39 +9,35 @@ class ContactsController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Contact::class);
+
         return request()->user()->contacts;
     }
 
     public function store()
     {
+        $this->authorize('create', Contact::class);
+
         request()->user()->contacts()->create(array_merge(['user_id' => request()->user()->id], $this->validateData()));
     }
 
     public function show(Contact $contact)
     {
-        // ２つのモデルが異なるかを判定する
-        if(request()->user()->isNot($contact->user)) {
-            return response([], 403);
-        }
+        $this->authorize('view', $contact);
 
         return $contact;
     }
 
     public function update(Contact $contact)
     {
-        if(request()->user()->isNot($contact->user)) {
-            return response([], 403);
-        }
+        $this->authorize('update', $contact);
 
         $contact->update($this->validateData());
     }
 
     public function destroy(Contact $contact)
     {
-        // ２つのモデルが異なるかを判定する
-        if(request()->user()->isNot($contact->user)) {
-            return response([], 403);
-        }
+        $this->authorize('delete', $contact);
 
         $contact->delete();
     }
