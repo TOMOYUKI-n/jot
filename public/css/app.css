@@ -536,6 +536,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-screen {
   height: 100vh;
 }
+.h-12 {
+  height: 3rem;
+}
 .min-h-screen {
   min-height: 100vh;
 }
@@ -556,6 +559,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-full {
   width: 100%;
+}
+.w-48 {
+  width: 12rem;
+}
+.w-12 {
+  width: 3rem;
 }
 .max-w-6xl {
   max-width: 72rem;
@@ -587,6 +596,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-t {
   border-top-width: 1px;
 }
+.border-r-2 {
+  border-right-width: 2px;
+}
 .border-gray-200 {
   --tw-border-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
@@ -594,6 +606,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-red-600 {
   --tw-border-opacity: 1;
   border-color: rgb(220 38 38 / var(--tw-border-opacity));
+}
+.border-gray-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(156 163 175 / var(--tw-border-opacity));
 }
 .bg-white {
   --tw-bg-opacity: 1;
@@ -618,6 +634,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-gray-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+}
+.bg-gray-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 .fill-current {
   fill: currentColor;
@@ -665,6 +685,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 .pt-6 {
   padding-top: 1.5rem;
 }
+.pl-6 {
+  padding-left: 1.5rem;
+}
+.pt-4 {
+  padding-top: 1rem;
+}
+.pt-12 {
+  padding-top: 3rem;
+}
 .text-left {
   text-align: left;
 }
@@ -705,6 +734,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .leading-7 {
   line-height: 1.75rem;
+}
+.tracking-wide {
+  letter-spacing: 0.025em;
 }
 .text-gray-200 {
   --tw-text-opacity: 1;
@@ -758,6 +790,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-text-opacity: 1;
   color: rgb(30 64 175 / var(--tw-text-opacity));
 }
+.text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+}
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
@@ -788,6 +824,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .hover\:text-blue-200:hover {
   --tw-text-opacity: 1;
   color: rgb(191 219 254 / var(--tw-text-opacity));
+}
+.hover\:text-blue-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
 }
 .focus\:bg-blue-700:focus {
   --tw-bg-opacity: 1;
