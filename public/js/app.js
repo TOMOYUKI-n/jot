@@ -5969,6 +5969,9 @@ __webpack_require__.r(__webpack_exports__);
         'bithday': ''
       }
     };
+  },
+  methods: {
+    submitForm: function submitForm() {}
   }
 });
 
@@ -30049,6 +30052,14 @@ var render = function () {
   return _c("div", [
     _c(
       "form",
+      {
+        on: {
+          submit: function ($event) {
+            $event.preventDefault()
+            return _vm.submitForm.apply(null, arguments)
+          },
+        },
+      },
       [
         _c("InputField", {
           attrs: {

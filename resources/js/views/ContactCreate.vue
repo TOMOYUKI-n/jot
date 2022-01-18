@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form>
+        <form @submit.prevent="submitForm">
             <InputField name="name" label="Contact Name" placeholder="Contact Name" @update:field="form.name = $event"/>
             <InputField name="email" label="Contact Email" placeholder="Contact Email" @update:field="form.email = $event"/>
             <InputField name="conpany" label="conpany" placeholder="conpany" @update:field="form.conpany = $event"/>
@@ -32,6 +32,12 @@ export default {
                 'conpany': '',
                 'bithday': '',
             }
+        }
+    },
+
+    methods: {
+        submitForm() {
+            
         }
     }
 }
