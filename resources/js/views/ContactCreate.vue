@@ -1,14 +1,10 @@
 <template>
     <div>
-        <form>
-            <div class="relative pb-4">
-                <label for="name" class="text-blue-500 pt-2 uppercase font-bold text-xs absolute">
-                    Contact Name
-                </label>
-                <input id="name" type="text"
-                    class="pt-8 w-full text-gray-900 border-b pb-2 focus:outline-none focus:border-blue-400"
-                    placeholder="Contact Name">
-            </div>
+        <form @submit.prevent="submitForm">
+            <InputField name="name" label="Contact Name" placeholder="Contact Name" @update:field="form.name = $event"/>
+            <InputField name="email" label="Contact Email" placeholder="Contact Email" @update:field="form.email = $event"/>
+            <InputField name="conpany" label="conpany" placeholder="conpany" @update:field="form.conpany = $event"/>
+            <InputField name="birthday" label="birthday" placeholder="MM/DD/YYYY" @update:field="form.birthday = $event"/>
 
             <div class="flex justify-end">
                 <button class="py-2 px-4 rounded border text-red-700 mr-5 hover:border-red-700">Cancel</button>
@@ -20,8 +16,30 @@
 </template>
 
 <script>
+import InputField from '../components/InputField';
 export default {
-    
+    name: "ContactsCreate",
+
+    components: {
+        InputField
+    },
+
+    data: function() {
+        return {
+            form: {
+                'name': '',
+                'email': '',
+                'conpany': '',
+                'bithday': '',
+            }
+        }
+    },
+
+    methods: {
+        submitForm() {
+            
+        }
+    }
 }
 </script>
 
