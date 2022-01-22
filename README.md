@@ -40,5 +40,5 @@ $ pf an_authenticated_user_can_add_a_contact
 
 ### DBを用意
 ```
-$ mysql -u root
+$ mysql -u root -p
 ```
