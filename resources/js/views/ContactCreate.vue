@@ -1,10 +1,10 @@
 <template>
     <div>
         <form @submit.prevent="submitForm">
-            <InputField name="name" label="Contact Name" placeholder="Contact Name" @update:field="form.name = $event"/>
-            <InputField name="email" label="Contact Email" placeholder="Contact Email" @update:field="form.email = $event"/>
-            <InputField name="conpany" label="conpany" placeholder="conpany" @update:field="form.conpany = $event"/>
-            <InputField name="birthday" label="birthday" placeholder="MM/DD/YYYY" @update:field="form.birthday = $event"/>
+            <InputField name="name" label="Contact Name" placeholder="Contact Name" @update:field="form.name = $event" :errors="errors"/>
+            <InputField name="email" label="Contact Email" placeholder="Contact Email" @update:field="form.email = $event" :errors="errors"/>
+            <InputField name="company" label="company" placeholder="company" @update:field="form.company = $event" :errors="errors"/>
+            <InputField name="birthday" label="birthday" placeholder="MM/DD/YYYY" @update:field="form.birthday = $event" :errors="errors"/>
 
             <div class="flex justify-end">
                 <button class="py-2 px-4 rounded border text-red-700 mr-5 hover:border-red-700">Cancel</button>
@@ -29,15 +29,23 @@ export default {
             form: {
                 'name': '',
                 'email': '',
-                'conpany': '',
-                'bithday': '',
-            }
+                'company': '',
+                'birthday': '',
+            },
+
+            errors: null,
         }
     },
 
     methods: {
-        submitForm() {
-            
+        submitForm: function () {
+            axios.post('/api/contacts', this.form)
+                .then(response => {
+
+                })
+                .catch(errors => {
+                    this.errors = errors.response.data.errors;
+                });
         }
     }
 }
