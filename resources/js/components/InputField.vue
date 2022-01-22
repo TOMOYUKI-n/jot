@@ -58,8 +58,12 @@ export default {
 }
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
+@tailwind components;
+@layer components {
     .error-field {
-        @apply .border-red-500 .border-b-2
+        @apply border-red-500 border-b-2;
     }
+}
+
 </style>
