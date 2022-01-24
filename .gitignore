@@ -1,17 +1,32 @@
-/node_modules
-/public/hot
-/public/storage
-/public/css/app.css
-/public/js/app.js
-/storage/*.key
+### Composer ###
+composer.phar
 /vendor
-.env
-.env.backup
+
+### PHP Coding Standards Fixer ###
 .phpunit.result.cache
-docker-compose.override.yml
-Homestead.json
-Homestead.yaml
+.php_cs.cache
+
+### Node ###
+/node_modules
+
+## npm ##
 npm-debug.log
 yarn-error.log
+
+## Laravel Homestead ##
+/.vagrant
+Homestead.yaml
+Homestead.json
+
+## Laravel env ##
+.env
+.env.backup
+
+## Docker ##
+docker-compose.override.yml
+
+## Common ##
 /.idea
 /.vscode
+/storage/*.key
+
