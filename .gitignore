@@ -30,3 +30,7 @@ docker-compose.override.yml
 /.vscode
 /storage/*.key
 
+## public
+public/css/*
+public/build/*
+public/js/*
