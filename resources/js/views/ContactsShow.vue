@@ -54,7 +54,13 @@ export default {
 
     data: function () {
         return {
-            contact: null,
+            contact: {
+                id : "",
+                name: "",
+                email: "",
+                company: "",
+                birthday: "",
+            },
         }
     }
 }
