@@ -15,7 +15,7 @@
         </div>
 
         <div class="flex items-center pt-6">
-            <div>VG</div>
+            <UserCircle :name="contact.name"/>
 
             <p class="pl-5 text-xl">{{ contact.name }}</p>
         </div>
@@ -34,8 +34,13 @@
 </template>
 
 <script>
+import UserCircle from "../components/UserCircle.vue";
 export default {
     name: "ContactsShow",
+
+    components: {
+        UserCircle
+    },
 
     mounted() {
         axios.get('/api/contacts/' + this.$route.params.id)
