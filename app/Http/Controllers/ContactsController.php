@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Contact as ContactResources;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ContactsController extends Controller
@@ -20,7 +21,7 @@ class ContactsController extends Controller
     {
         $this->authorize('create', Contact::class);
 
-        $contact = request()->user()->contacts()->create(array_merge(['user_id' => request()->user()->id], $this->validateData()));
+        $contact = request()->user()->contacts()->create($this->validateData());
 
         return (new ContactResources($contact))
             ->response()
