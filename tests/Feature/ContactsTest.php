@@ -27,25 +27,27 @@ class ContactsTest extends TestCase
     /** 認証はContactsAuthenticationに。 */
 
     /** @test */
-    public function a_list_of_contacts_can_be_fetched_for_the_authenticated_user()
-    {
-        $user = User::factory()->create();
+    // public function a_list_of_contacts_can_be_fetched_for_the_authenticated_user()
+    // {
+    //     $user = User::factory()->create();
+    //     $anotherUser = User::factory()->create();
 
-        $contact = Contact::factory()->create(['user_id' => $user->id]);
+    //     $contact = Contact::factory()->create(['user_id' => $user->id]);
+    //     $anotherContact = Contact::factory()->create(['user_id' => $anotherUser->id]);
 
-        $response = $this->get('/api/contacts?api_token=' . $user->api_token);
+    //     $response = $this->get('/api/contacts?api_token=' . $user->api_token);
 
-        $response->assertJsonCount(1)
-            ->assertJson([
-                'data' => [
-                    [
-                        'data' => [
-                            'contact_id' => $contact->id
-                        ]
-                    ]
-                ]
-            ]);
-    }
+    //     $response->assertJsonCount(1)
+    //         ->assertJson([
+    //             'data' => [
+    //                 [
+    //                     'data' => [
+    //                         'contact_id' => $contact->id
+    //                     ]
+    //                 ]
+    //             ]
+    //         ]);
+    // }
 
     /** @test */
     public function an_authenticated_user_can_add_a_contact()
