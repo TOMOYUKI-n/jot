@@ -29,6 +29,7 @@ docker-compose.override.yml
 /.idea
 /.vscode
 /storage/*.key
+jot.session.sql
 
 ## public
 public/css/*
