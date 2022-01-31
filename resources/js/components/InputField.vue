@@ -22,6 +22,7 @@ export default {
         'label',
         'placeholder',
         'errors',
+        'editData',
     ],
 
     data: function() {
@@ -59,8 +60,14 @@ export default {
             return {
                 'error-field': this.hasError
             }
+        },
+    },
+    watch: {
+        editData: function (val) {
+            this.value = val;
         }
-    }
+    },
+
 }
 </script>
 
