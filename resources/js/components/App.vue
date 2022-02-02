@@ -1,7 +1,6 @@
 <template>
     <div class="h-screen bg-white">
         <div class="flex">
-            <!-- left -->
             <div class="pl-6 bg-gray-200 w-48 h-screen border-r-2 border-gray-400">
                 <nav class="pt-4">
                     <router-link to="/">
@@ -34,7 +33,6 @@
                 </nav>
             </div>
 
-            <!-- right -->
             <div class="flex flex-col flex-1 h-screen overflow-y-hidden">
                 <!-- head -->
                 <div class="h-16 px-6 border-b border-gray-400 flex items-center justify-between">
@@ -45,7 +43,6 @@
                     <UserCircle :name="user.name"/>
 
                 </div>
-                <!-- body -->
                 <div class="flex flex-col overflow-y-hidden flex-1">
                     <router-view class="p-6 overflow-x-hidden"></router-view>
                 </div>
