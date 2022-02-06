@@ -14,7 +14,7 @@
 
             <div class="flex justify-end">
                 <button class="py-2 px-4 rounded border text-red-700 mr-5 hover:border-red-700">Cancel</button>
-                <button class="bg-blue-500 py-2 px-4 rounded text-white hover:bg-blue-400">Add New Contact</button>
+                <button class="bg-blue-500 py-2 px-4 rounded text-white hover:bg-blue-400">Save</button>
             </div>
             
         </form>
@@ -62,7 +62,7 @@ export default {
 
     methods: {
         submitForm: function () {
-            axios.post('/api/contacts', this.form)
+            axios.patch('/api/contacts/' + this.$route.params.id, this.form)
                 .then(response => {
                     this.$router.push(response.data.links.self)
                 })
