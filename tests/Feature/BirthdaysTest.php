@@ -13,14 +13,6 @@ class BirthdaysTest extends TestCase
 {
     use RefreshDatabase;
 
-    // protected function setUp(): void
-    // {
-    //     parent::setUp();
-
-    //     /** sanctum利用で認証を通す */
-    //     $this->user = Sanctum::actingAs(User::factory()->create());
-    // }
-
     /** @test */
     public function contacts_with_birthdays_in_current_month_can_be_fetched(){
         $this->withExceptionHandling();
