@@ -1,5 +1,5 @@
 <template>
-    <ContactsList endpoint="/api/contacts" />
+    <ContactsList endpoint="/api/birthdays" />
 </template>
 <script>
 import ContactsList from '../components/ContactsList.vue';
