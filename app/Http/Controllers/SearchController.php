@@ -10,7 +10,7 @@ class SearchController extends Controller
 {
     public function index()
     {
-        $data = request()->validata([
+        $data = request()->validate([
             'searchTerm' => 'required',
         ]);
 
