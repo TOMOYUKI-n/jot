@@ -1,6 +1,7 @@
 ### Composer ###
 composer.phar
 /vendor
+/storage/*.index
 
 ### PHP Coding Standards Fixer ###
 .phpunit.result.cache
