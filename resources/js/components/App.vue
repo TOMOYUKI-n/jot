@@ -40,7 +40,11 @@
                     <div>
                         Contacts
                     </div>
-                    <UserCircle :name="user.name"/>
+
+                    <div class="flex items-center">
+                        <SearchBar />
+                        <UserCircle :name="user.name"/>
+                    </div>
 
                 </div>
                 <div class="flex flex-col overflow-y-hidden flex-1">
@@ -52,6 +56,7 @@
 </template>
 <script>
 import UserCircle from "./UserCircle.vue";
+import SearchBar from "../components/SearchBar.vue";
 export default {
     name: "App",
 
@@ -60,7 +65,8 @@ export default {
     ],
 
     components: {
-        UserCircle
+        UserCircle,
+        SearchBar
     },
 
     created() {
