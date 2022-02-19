@@ -54,25 +54,25 @@
         </div>
     </div>
 </template>
-<script>
+<script lang="ts">
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+// import VueCompositionAPI from '@vue/composition-api'
 import UserCircle from "./UserCircle.vue";
 import SearchBar from "../components/SearchBar.vue";
-export default {
-    name: "App",
 
-    props: [
-        'user'
-    ],
-
-    components: {
-        UserCircle,
-        SearchBar
-    },
+@Component({
+    UserCircle,
+    SearchBar
+})
+export default class App extends Vue {
+    @Prop({ type: Object, required: true }) user;
+    private title = '';
+    public $route: any;
 
     created() {
         this.title = this.$route.meta.title;
 
-        window.axios.interceptors.request.use(
+        globalThis.axios.interceptors.request.use(
             (config) => {
                 if (config.method === 'get') {
                     config.url = config.url + '?api_token=' + this.user.api_token;
@@ -86,23 +86,17 @@ export default {
                 return config;
             }
         )
-    },
+    };
 
-    data: function() {
-        return {
-            title: '',
-        }
-    },
+    @Watch('$route', { immediate: true, deep: true })
+    onUrlChange(to: any) {
+        this.title = to.meta.title;
+    };
 
-    watch: {
-        $route(to, from) {
-            this.title = to.meta.title;
-        },
-
-        title() {
-            document.title = this.title + ' | jot - The SPA App'
-        }
-    }
+    @Watch('title')
+    onChange() {
+        document.title = this.title + ' | jot - The SAP APP';
+    };
 }
 </script>
 
